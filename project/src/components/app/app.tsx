@@ -13,27 +13,28 @@ import MyListPage from '../../pages/my-list-page/my-list-page';
 
 type Props = {
   movie: Movie;
+  movieList: Movie[];
 }
 
 const App: FC<Props> = (props) => {
-  const { movie } = props;
+  const { movie, movieList } = props;
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={ROUTES.MAIN} element={<MainPage movie={movie}/>}/>
+        <Route path={ROUTES.MAIN} element={<MainPage movie={movie} movieList={movieList}/>}/>
         <Route path={ROUTES.SIGNIN} element={<SignInPage/>}/>
         <Route
           path={ROUTES.MYLIST}
           element={
             <PrivateRoute authorizationStatus={AuthorizationStatus.NoAuth}>
-              <MyListPage/>
+              <MyListPage movieList={movieList} />
             </PrivateRoute>
           }
         />
-        <Route path={ROUTES.FILM} element={<MoviePage/>}/>
+        <Route path={ROUTES.FILM} element={<MoviePage movieList={movieList}/>}/>
         <Route path={ROUTES.ADDREVIEW} element={<AddReviewPage/>}/>
-        <Route path={ROUTES.PLAYER} element={<PlayerPage/>}/>
+        <Route path={ROUTES.PLAYER} element={<PlayerPage movie={movie} />}/>
         <Route path={ROUTES.NOTFOUND} element={<NotFoundPage/>}/>
       </Routes>
     </BrowserRouter>

@@ -1,14 +1,16 @@
 import { FC } from 'react';
-import { MovieCardProps } from '../../types/movie-card.types';
+import { Movie } from '../../types/main-page.types';
+import { Link } from 'react-router-dom';
 
 type Props = {
-  movie: MovieCardProps;
+  movie: Movie;
 }
 
 const MovieCard: FC<Props> = (props) => {
   const {
     title,
-    posterUrl
+    posterUrl,
+    id,
   } = props.movie;
 
   return (
@@ -17,7 +19,7 @@ const MovieCard: FC<Props> = (props) => {
         <img src={posterUrl} alt={title} width="280" height="175"/>
       </div>
       <h3 className="small-film-card__title">
-        <a className="small-film-card__link" href="film-page.html">{title}</a>
+        <Link className="small-film-card__link" to={`/films/${id}`}>{title}</Link>
       </h3>
     </article>
   );
