@@ -13,4 +13,24 @@ export const MOVIE_LIST: MovieCardProps[] = [
     title: 'shutter',
     posterUrl: 'img/shutter-island.jpg'
   },
+  {
+    title: 'revenant',
+    posterUrl: 'img/revenant.jpg'
+  },
+  {
+    title: 'war',
+    posterUrl: 'img/war-of-the-worlds.jpg'
+  },
+  {
+    title: 'mindhunter',
+    posterUrl: 'img/mindhunter.jpg'
+  },
+  {
+    title: 'aviator',
+    posterUrl: 'img/aviator.jpg'
+  },
+  {
+    title: 'avatar',
+    posterUrl: 'img/avatar.jpg'
+  },
 ];
