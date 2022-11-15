@@ -1,22 +1,51 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Movie } from '../../types/main-page.types';
 import { Link } from 'react-router-dom';
+import { VideoPlayer } from '../video-player/video-player';
 
 type Props = {
   movie: Movie;
 }
 
 const MovieCard: FC<Props> = (props) => {
-  const {
-    title,
-    posterUrl,
-    id,
-  } = props.movie;
+  const { movie: { videoPath, posterUrl, id, title }} = props;
+
+  const [isPreviewVideoStarted, setIsPreviewVideoStarted] = useState<boolean>(false);
+  const [isPreviewStarted, setPreviewStarted] = useState<boolean>(false);
+
+  useEffect(() => {
+    let videoNeedToPlay = true;
+
+    if (isPreviewStarted) {
+      setTimeout(() => videoNeedToPlay && setIsPreviewVideoStarted(true), 500);
+    }
+
+    return () => {
+      videoNeedToPlay = false;
+    };
+  }, [isPreviewStarted]);
+
+  const handleMouseEnter = () => {
+    setPreviewStarted(true);
+  };
+
+  const handleMouseLeave = () => {
+    setPreviewStarted(false);
+    setIsPreviewVideoStarted(false);
+  };
+
 
   return (
-    <article className="small-film-card catalog__films-card">
+    <article className="small-film-card catalog__films-card" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div className="small-film-card__image">
-        <img src={posterUrl} alt={title} width="280" height="175"/>
+        <VideoPlayer
+          src={videoPath}
+          poster={posterUrl}
+          muted
+          height="175"
+          width="280"
+          isPlaying={isPreviewVideoStarted}
+        />
       </div>
       <h3 className="small-film-card__title">
         <Link className="small-film-card__link" to={`/films/${id}`}>{title}</Link>
