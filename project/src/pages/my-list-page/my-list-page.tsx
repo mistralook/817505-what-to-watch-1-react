@@ -1,13 +1,10 @@
 import { FC } from 'react';
-import { Movie } from '../../types/main-page.types';
+import { useAppSelector } from '../../hooks/redux.hooks';
 import CatalogMovieList from '../../components/movie-list/catalog-movie-list';
 
-type Props = {
-  movieList: Movie[];
-}
 
-const MyListPage: FC<Props> = (props: Props) => {
-  const { movieList } = props;
+const MyListPage: FC = () => {
+  const { movies } = useAppSelector((state) => state);
 
   return (
     <>
@@ -84,7 +81,7 @@ const MyListPage: FC<Props> = (props: Props) => {
 
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
-          <CatalogMovieList movies={movieList} />
+          <CatalogMovieList movies={movies} />
         </section>
 
         <footer className="page-footer">
