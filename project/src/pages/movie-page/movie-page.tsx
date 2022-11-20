@@ -1,22 +1,26 @@
-import { FC } from 'react';
-import { Movie } from '../../types/main-page.types';
+import { FC, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getMovieById } from '../../utils/movie';
+import { useAppSelector } from '../../hooks/redux.hooks';
 import CatalogMovieList from '../../components/movie-list/catalog-movie-list';
 import MovieTabs from '../../components/tabs/movie-tabs';
 import NotFoundPage from '../not-found-page/not-found-page';
 
-type Props = {
-  movieList: Movie[];
-}
 
-const MoviePage: FC<Props> = (props: Props) => {
-  const { movieList } = props;
+const MoviePage: FC = () => {
+  const { movies } = useAppSelector((state) => state);
   const { id } = useParams();
   const currentMovie = getMovieById(id ?? '');
+  const filteredMovies = useMemo(() =>
+    movies.filter(
+      (movie) => movie.genre === currentMovie?.genre && movie.id !== currentMovie?.id
+    ).slice(0, 4), [movies]);
+
   if (!currentMovie) {
     return <NotFoundPage />;
   }
+
+
   return (
     <>
       <section className="film-card film-card--full">
@@ -93,11 +97,7 @@ const MoviePage: FC<Props> = (props: Props) => {
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
           <CatalogMovieList
-            movies={
-              movieList.filter((movie) =>
-                movie.genre === currentMovie.genre && movie.id !== currentMovie.id
-              ).slice(0, 4)
-            }
+            movies={filteredMovies}
           />
         </section>
 
