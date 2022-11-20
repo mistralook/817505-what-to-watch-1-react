@@ -1,8 +1,11 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Genre, Movie } from '../../types/main-page.types';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux.hooks';
+import { resetMoviesAmount } from '../../store/action';
+import { Link } from 'react-router-dom';
 import CatalogMovieList from '../../components/movie-list/catalog-movie-list';
 import GenresList from '../../components/genre-list/genre-list';
-import { useAppSelector } from '../../hooks/redux.hooks';
+import ShowMore from '../../components/show-more/show-more';
 
 type Props = {
   movie: Movie;
@@ -10,7 +13,12 @@ type Props = {
 
 const MainPage: FC<Props> = (props) => {
   const { movie: { title, genre, releaseDate }} = props;
-  const { movies } = useAppSelector((state) => state);
+  const { movies, amountOfVisibleMovies } = useAppSelector((state) => state);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(resetMoviesAmount());
+  }, [dispatch]);
 
   return (
     <>
@@ -55,11 +63,11 @@ const MainPage: FC<Props> = (props) => {
 
         <header className="page-header film-card__head">
           <div className="logo">
-            <a href={'/'} className="logo__link">
+            <Link to={'/'} className="logo__link">
               <span className="logo__letter logo__letter--1">W</span>
               <span className="logo__letter logo__letter--2">T</span>
               <span className="logo__letter logo__letter--3">W</span>
-            </a>
+            </Link>
           </div>
 
           <ul className="user-block">
@@ -113,20 +121,18 @@ const MainPage: FC<Props> = (props) => {
 
           <GenresList genres={Object.values(Genre)} />
 
-          <CatalogMovieList movies={movies} />
+          <CatalogMovieList movies={movies.slice(0, amountOfVisibleMovies)} />
 
-          <div className="catalog__more">
-            <button className="catalog__button" type="button">Show more</button>
-          </div>
+          <ShowMore />
         </section>
 
         <footer className="page-footer">
           <div className="logo">
-            <a href={'/'} className="logo__link logo__link--light">
+            <Link to={'/'} className="logo__link">
               <span className="logo__letter logo__letter--1">W</span>
               <span className="logo__letter logo__letter--2">T</span>
               <span className="logo__letter logo__letter--3">W</span>
-            </a>
+            </Link>
           </div>
 
           <div className="copyright">

@@ -1,0 +1,1 @@
+export const AMOUNT_OF_VISIBLE_MOVIES_STEP = 8;
