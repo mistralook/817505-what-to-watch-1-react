@@ -6,7 +6,7 @@ type Props = {
 }
 
 const PlayerPage: FC<Props> = (props: Props) => {
-  const { videoPath, posterUrl } = props.movie;
+  const { videoLink, posterImage } = props.movie;
 
   return (
     <>
@@ -58,7 +58,7 @@ const PlayerPage: FC<Props> = (props: Props) => {
       </div>
 
       <div className="player">
-        <video src={videoPath} className="player__video" poster={posterUrl} />
+        <video src={videoLink} className="player__video" poster={posterImage} />
 
         <button type="button" className="player__exit">Exit</button>
 

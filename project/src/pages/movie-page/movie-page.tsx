@@ -1,28 +1,32 @@
 import { FC } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getMovieById } from '../../utils/movie';
-import { MOVIE_LIST } from '../../mocks/film';
 import CatalogMovieList from '../../components/movie-list/catalog-movie-list';
 import MovieTabs from '../../components/tabs/movie-tabs';
 import NotFoundPage from '../not-found-page/not-found-page';
+import { Movie } from '../../types/main-page.types';
 
+type Props = {
+  movies: Movie[];
+}
 
-const MoviePage: FC = () => {
+const MoviePage: FC<Props> = (props) => {
+  const { movies } = props;
   const { id } = useParams();
-  const currentMovie = getMovieById(id ?? '');
-  const filteredMovies = MOVIE_LIST.filter((movie) => movie.genre === currentMovie?.genre && movie.id !== currentMovie?.id).slice(0, 4);
+
+  const currentMovie = getMovieById(Number(id));
+  const filteredMovies = movies.filter((movie) => movie.genre === currentMovie?.genre && movie.id !== currentMovie?.id).slice(0, 4);
 
   if (!currentMovie) {
     return <NotFoundPage />;
   }
-
 
   return (
     <>
       <section className="film-card film-card--full">
         <div className="film-card__hero">
           <div className="film-card__bg">
-            <img src={currentMovie.posterUrl} alt={currentMovie.title}/>
+            <img src={currentMovie.posterImage} alt={currentMovie.name}/>
           </div>
 
           <h1 className="visually-hidden">WTW</h1>
@@ -50,10 +54,10 @@ const MoviePage: FC = () => {
 
           <div className="film-card__wrap">
             <div className="film-card__desc">
-              <h2 className="film-card__title">{currentMovie.title}</h2>
+              <h2 className="film-card__title">{currentMovie.name}</h2>
               <p className="film-card__meta">
                 <span className="film-card__genre">{currentMovie.genre}</span>
-                <span className="film-card__year">{currentMovie.releaseDate}</span>
+                <span className="film-card__year">{currentMovie.released}</span>
               </p>
 
               <div className="film-card__buttons">
@@ -79,7 +83,7 @@ const MoviePage: FC = () => {
         <div className="film-card__wrap film-card__translate-top">
           <div className="film-card__info">
             <div className="film-card__poster film-card__poster--big">
-              <img src={currentMovie.posterUrl} alt={currentMovie.title} width="218"
+              <img src={currentMovie.posterImage} alt={currentMovie.name} width="218"
                 height="327"
               />
             </div>
