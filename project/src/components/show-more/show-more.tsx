@@ -1,20 +1,23 @@
-import { FC } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux.hooks';
-import { showMoreMoviesAmount } from '../../store/action';
+import { Dispatch, FC, SetStateAction } from 'react';
+import { AMOUNT_OF_VISIBLE_MOVIES_STEP } from '../../const/const';
 
-const ShowMore: FC = () => {
-  const { movies, amountOfVisibleMovies } = useAppSelector((state) => state);
-  const dispatch = useAppDispatch();
+type Props = {
+  isVisible: boolean;
+  setNumberOfShownMovies: Dispatch<SetStateAction<number>>;
+};
+
+const ShowMore: FC<Props> = (props) => {
+  const { setNumberOfShownMovies, isVisible } = props;
 
   return (
     <div
       className="catalog__more"
-      style={{display: movies.length > amountOfVisibleMovies ? 'block' : 'none'}}
+      style={{display: isVisible ? 'block' : 'none'}}
     >
       <button
         className="catalog__button"
         type="button"
-        onClick={() => dispatch(showMoreMoviesAmount())}
+        onClick={() => setNumberOfShownMovies((prev) => prev + AMOUNT_OF_VISIBLE_MOVIES_STEP)}
       >
         Show more
       </button>

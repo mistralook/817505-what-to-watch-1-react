@@ -1,17 +1,16 @@
 import { FC } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getMovieById } from '../../utils/movie';
-import { useAppSelector } from '../../hooks/redux.hooks';
+import { MOVIE_LIST } from '../../mocks/film';
 import CatalogMovieList from '../../components/movie-list/catalog-movie-list';
 import MovieTabs from '../../components/tabs/movie-tabs';
 import NotFoundPage from '../not-found-page/not-found-page';
 
 
 const MoviePage: FC = () => {
-  const { movies } = useAppSelector((state) => state);
   const { id } = useParams();
   const currentMovie = getMovieById(id ?? '');
-  const filteredMovies = movies.filter((movie) => movie.genre === currentMovie?.genre && movie.id !== currentMovie?.id).slice(0, 4);
+  const filteredMovies = MOVIE_LIST.filter((movie) => movie.genre === currentMovie?.genre && movie.id !== currentMovie?.id).slice(0, 4);
 
   if (!currentMovie) {
     return <NotFoundPage />;
@@ -44,7 +43,7 @@ const MoviePage: FC = () => {
                 </div>
               </li>
               <li className="user-block__item">
-                <a className="user-block__link">Sign out</a>
+                <a href="/" className="user-block__link">Sign out</a>
               </li>
             </ul>
           </header>

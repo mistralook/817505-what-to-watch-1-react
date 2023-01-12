@@ -1,4 +1,4 @@
-export const ROUTES = {
+export const BrowserRoutes = {
   MAIN: '/',
   SIGNIN: 'login',
   MYLIST: 'mylist',
