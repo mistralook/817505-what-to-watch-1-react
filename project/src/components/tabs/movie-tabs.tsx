@@ -1,6 +1,5 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 import { Movie } from '../../types/main-page.types';
-import { REVIEW_LIST } from '../../mocks/film';
 import OverviewTab from './overview.tab';
 import DetailsTab from './details.tab';
 import ReviewsTab from './reviews.tab';
@@ -27,7 +26,7 @@ const MovieTabs: FC<Props> = (props) => {
     }
 
     if (activeTab === 'Reviews') {
-      return <ReviewsTab reviews={REVIEW_LIST}/>;
+      return <ReviewsTab movieId={movie.id} />;
     }
   }, [activeTab, movie]);
 

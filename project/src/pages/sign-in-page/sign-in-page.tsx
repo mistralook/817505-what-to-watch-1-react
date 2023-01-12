@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useAppDispatch } from '../../hooks/redux.hooks';
 import { loginAction } from '../../store/api-actions';
@@ -8,6 +8,7 @@ const SignInPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -21,8 +22,7 @@ const SignInPage = () => {
     event.preventDefault();
 
     if (email && password) {
-      dispatch(loginAction({ email, password }));
-      window.location.replace(BrowserRoutes.MAIN);
+      dispatch(loginAction({ email, password })).then(() => navigate(BrowserRoutes.MAIN));
     }
   };
 

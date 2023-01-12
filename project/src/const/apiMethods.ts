@@ -1,5 +1,6 @@
 export enum ApiMethods {
   FILMS = '/films',
   LOGIN = '/login',
-  LOGOUT = '/logout'
+  LOGOUT = '/logout',
+  COMMENTS = '/comments'
 }
