@@ -1,6 +1,6 @@
 import { FC} from 'react';
 import { Navigate } from 'react-router-dom';
-import { ROUTES, AuthorizationStatus } from '../../app-routes.const';
+import { BrowserRoutes, AuthorizationStatus } from '../../app-routes.const';
 
 type Props = {
   authorizationStatus: AuthorizationStatus;
@@ -13,7 +13,7 @@ const PrivateRoute: FC<Props> = (props) => {
   return (
     authorizationStatus === AuthorizationStatus.Auth
       ? children
-      : <Navigate to={ROUTES.SIGNIN} />
+      : <Navigate to={BrowserRoutes.SIGNIN} />
   );
 };
 

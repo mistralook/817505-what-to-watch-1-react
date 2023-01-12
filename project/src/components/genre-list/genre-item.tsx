@@ -1,15 +1,16 @@
-import React, { FC } from 'react';
+import React, { Dispatch, FC, SetStateAction } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux.hooks';
-import { changeGenre, fillMovieList } from '../../store/action';
+import { changeGenre } from '../../store/action';
 import { Genre } from '../../types/main-page.types';
-import { MOVIE_LIST } from '../../mocks/film';
+import { AMOUNT_OF_VISIBLE_MOVIES_STEP } from '../../const/const';
 
 type Props = {
   genre: Genre;
+  setNumberOfShownMovies: Dispatch<SetStateAction<number>>;
 };
 
 const GenreItem: FC<Props> = (props) => {
-  const { genre } = props;
+  const { genre, setNumberOfShownMovies } = props;
   const { activeGenre } = useAppSelector((state) => state);
   const dispatch = useAppDispatch();
 
@@ -19,16 +20,12 @@ const GenreItem: FC<Props> = (props) => {
   ) => {
     e.preventDefault();
     dispatch(changeGenre({ genre: activeGenreToChange}));
-    dispatch(
-      fillMovieList({
-        movies: MOVIE_LIST.filter((movie) =>
-          movie.genre === activeGenreToChange || activeGenreToChange === Genre.ALL_GENRES)
-      }));
+    setNumberOfShownMovies(AMOUNT_OF_VISIBLE_MOVIES_STEP);
   };
 
   return (
     <li className={`catalog__genres-item ${genre === activeGenre ? ' catalog__genres-item--active' : ''}`}>
-      <a href='#' className='catalog__genres-link' onClick={(e) => handleChangeActiveGenre(e, genre)}>{genre}</a>
+      <a href='/' className='catalog__genres-link' onClick={(e) => handleChangeActiveGenre(e, genre)}>{genre}</a>
     </li>
   );
 };
