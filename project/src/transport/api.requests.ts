@@ -9,4 +9,5 @@ export const getSimilarMovies = async (movieId: number) => await axiosApi.get<Mo
 
 export const getMovieReviews = async (movieId: number) => await axiosApi.get<Review[]>(`${ApiMethods.COMMENTS}/${movieId}`);
 
-export const postMovieReview = async (movieId: number, review: { comment: string, rating: number }) => await axiosApi.post<Review[]>(`${ApiMethods.COMMENTS}/${movieId}`, {...review});
+export const postMovieReview = async (movieId: number, review: { comment: string; rating: number }) =>
+  await axiosApi.post<Review[]>(`${ApiMethods.COMMENTS}/${movieId}`, {...review});

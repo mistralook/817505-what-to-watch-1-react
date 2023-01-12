@@ -17,7 +17,7 @@ const AddReviewPage: FC = () => {
       if (data) {
         setMovie(data);
       } else {
-        return <NotFoundPage />
+        return <NotFoundPage />;
       }
     });
   }, [id]);

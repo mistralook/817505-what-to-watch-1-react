@@ -23,7 +23,7 @@ const FilmPage: FC = () => {
       if (data) {
         setCurrentMovie(data);
       } else {
-        return <NotFoundPage />
+        return <NotFoundPage />;
       }
     });
     getSimilarMovies(Number(id)).then(({ data }) => setSimilarFilms(data));
