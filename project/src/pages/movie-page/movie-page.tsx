@@ -5,6 +5,7 @@ import CatalogMovieList from '../../components/movie-list/catalog-movie-list';
 import MovieTabs from '../../components/tabs/movie-tabs';
 import NotFoundPage from '../not-found-page/not-found-page';
 import { Movie } from '../../types/main-page.types';
+import { UserBlock } from '../../components/user-block/user-block';
 
 type Props = {
   movies: Movie[];
@@ -40,16 +41,7 @@ const MoviePage: FC<Props> = (props) => {
               </Link>
             </div>
 
-            <ul className="user-block">
-              <li className="user-block__item">
-                <div className="user-block__avatar">
-                  <img src="img/avatar.jpg" alt="User avatar" width="63" height="63"/>
-                </div>
-              </li>
-              <li className="user-block__item">
-                <a href="/" className="user-block__link">Sign out</a>
-              </li>
-            </ul>
+            <UserBlock />
           </header>
 
           <div className="film-card__wrap">
