@@ -2,16 +2,22 @@ import { FC } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getMovieById } from '../../utils/movie';
 import AddReview from '../../components/add-review/add-review';
+import NotFoundPage from '../not-found-page/not-found-page';
 
 const AddReviewPage: FC = () => {
   const { id } = useParams();
-  const movie = getMovieById(id ?? '');
+
+  const movie = getMovieById(Number(id));
+
+  if (!movie) {
+    return <NotFoundPage />;
+  }
 
   return (
     <section className="film-card film-card--full">
       <div className="film-card__header">
         <div className="film-card__bg">
-          <img src={movie?.posterUrl} alt={movie?.title}/>
+          <img src={movie?.posterImage} alt={movie?.name}/>
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
@@ -28,7 +34,7 @@ const AddReviewPage: FC = () => {
           <nav className="breadcrumbs">
             <ul className="breadcrumbs__list">
               <li className="breadcrumbs__item">
-                <Link to={`/films/${movie?.id ?? '#'}`} className="breadcrumbs__link">{movie?.title}</Link>
+                <Link to={`/films/${movie?.id ?? '#'}`} className="breadcrumbs__link">{movie?.name}</Link>
               </li>
               <li className="breadcrumbs__item">
                 <Link to={`/films/${movie?.id ?? '#'}/review`} className="breadcrumbs__link">Add review</Link>
@@ -49,7 +55,7 @@ const AddReviewPage: FC = () => {
         </header>
 
         <div className="film-card__poster film-card__poster--small">
-          <img src={movie?.posterUrl} alt={movie?.title} width="218"
+          <img src={movie?.posterImage} alt={movie?.name} width="218"
             height="327"
           />
         </div>

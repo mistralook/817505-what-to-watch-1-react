@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Movie } from '../../types/main-page.types';
 import { AuthorizationStatus, BrowserRoutes } from '../../app-routes.const';
+import { useAppSelector } from '../../hooks/redux.hooks';
 import MainPage from '../../pages/main-page/main-page';
 import SignInPage from '../../pages/sign-in-page/sign-in-page';
 import MoviePage from '../../pages/movie-page/movie-page';
@@ -17,6 +18,7 @@ type Props = {
 
 const App: FC<Props> = (props) => {
   const { movie } = props;
+  const { movies } = useAppSelector((state) => state);
 
   return (
     <BrowserRouter>
@@ -31,7 +33,7 @@ const App: FC<Props> = (props) => {
             </PrivateRoute>
           }
         />
-        <Route path={BrowserRoutes.FILM} element={<MoviePage />}/>
+        <Route path={BrowserRoutes.FILM} element={<MoviePage movies={movies} />}/>
         <Route path={BrowserRoutes.ADDREVIEW} element={<AddReviewPage />}/>
         <Route path={BrowserRoutes.PLAYER} element={<PlayerPage movie={movie} />}/>
         <Route path={BrowserRoutes.NOTFOUND} element={<NotFoundPage />}/>
