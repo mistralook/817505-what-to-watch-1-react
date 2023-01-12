@@ -1,6 +1,13 @@
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC, FormEvent, useState } from 'react';
+import { postMovieReview } from '../../transport/api.requests';
 
-const AddReview: FC = () => {
+type Props = {
+  movieId: number;
+};
+
+const AddReview: FC<Props> = (props) => {
+  const { movieId } = props;
+
   const [reviewText, setReviewText] = useState('');
   const [rating, setRating] = useState(0);
 
@@ -12,8 +19,17 @@ const AddReview: FC = () => {
     setRating(Number(e.target.value));
   };
 
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (reviewText && rating) {
+      postMovieReview(movieId, {comment: reviewText, rating: rating}).then(() => window.history.back());
+    }
+  };
+
   return (
-    <form action="#" className="add-review__form">
+    <form action="#" className="add-review__form" onSubmit={handleSubmit}>
       <div className="rating">
         <div className="rating__stars">
           {

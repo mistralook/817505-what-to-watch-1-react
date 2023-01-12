@@ -1,25 +1,37 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getMovieById } from '../../utils/movie';
+import { Movie } from '../../types/main-page.types';
+import { UserBlock } from '../../components/user-block/user-block';
+import { useAppSelector } from '../../hooks/redux.hooks';
+import { getMovie, getSimilarMovies } from '../../transport/api.requests';
+import { AuthorizationStatus } from '../../app-routes.const';
 import CatalogMovieList from '../../components/movie-list/catalog-movie-list';
 import MovieTabs from '../../components/tabs/movie-tabs';
 import NotFoundPage from '../not-found-page/not-found-page';
-import { Movie } from '../../types/main-page.types';
-import { UserBlock } from '../../components/user-block/user-block';
+import Spinner from '../../components/spinner/spinner';
 
-type Props = {
-  movies: Movie[];
-}
+const FilmPage: FC = () => {
+  const [currentMovie, setCurrentMovie] = useState<Movie>();
+  const [similarFilms, setSimilarFilms] = useState<Movie[]>([]);
 
-const MoviePage: FC<Props> = (props) => {
-  const { movies } = props;
   const { id } = useParams();
 
-  const currentMovie = getMovieById(Number(id));
-  const filteredMovies = movies.filter((movie) => movie.genre === currentMovie?.genre && movie.id !== currentMovie?.id).slice(0, 4);
+  const { authorizationStatus } = useAppSelector((state) => state);
+
+  useEffect(() => {
+    getMovie(Number(id)).then(({ data }) => {
+      if (data) {
+        setCurrentMovie(data);
+      } else {
+        return <NotFoundPage />;
+      }
+    });
+    getSimilarMovies(Number(id)).then(({ data }) => setSimilarFilms(data));
+  }, [id]);
+
 
   if (!currentMovie) {
-    return <NotFoundPage />;
+    return <Spinner />;
   }
 
   return (
@@ -66,7 +78,11 @@ const MoviePage: FC<Props> = (props) => {
                   <span>My list</span>
                   <span className="film-card__count">9</span>
                 </button>
-                <Link to={`/films/${currentMovie.id ?? '#'}/review`} className="btn film-card__button">Add review</Link>
+                {
+                  authorizationStatus === AuthorizationStatus.Auth
+                    ? <Link to={`/films/${currentMovie.id}/review`} className="btn film-card__button">Add review</Link>
+                    : null
+                }
               </div>
             </div>
           </div>
@@ -89,7 +105,7 @@ const MoviePage: FC<Props> = (props) => {
         <section className="catalog catalog--like-this">
           <h2 className="catalog__title">More like this</h2>
           <CatalogMovieList
-            movies={filteredMovies}
+            movies={similarFilms}
           />
         </section>
 
@@ -111,4 +127,4 @@ const MoviePage: FC<Props> = (props) => {
   );
 };
 
-export default MoviePage;
+export default FilmPage;
