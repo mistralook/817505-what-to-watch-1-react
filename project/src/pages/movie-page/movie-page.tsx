@@ -1,33 +1,35 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Movie } from '../../types/main-page.types';
 import { UserBlock } from '../../components/user-block/user-block';
-import { useAppSelector } from '../../hooks/redux.hooks';
-import { getMovie, getSimilarMovies } from '../../transport/api.requests';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux.hooks';
 import { AuthorizationStatus } from '../../app-routes.const';
 import CatalogMovieList from '../../components/movie-list/catalog-movie-list';
 import MovieTabs from '../../components/tabs/movie-tabs';
-import NotFoundPage from '../not-found-page/not-found-page';
 import Spinner from '../../components/spinner/spinner';
+import { getAuthorizationStatus } from '../../store/user-reducer/user-selectors';
+import { getFilm, getSimilarFilm } from '../../store/movie-reducer/movie-selectors';
+import { getFilms } from '../../store/main-reducer/main-selectors';
+import { setIsDataLoaded } from '../../store/action';
+import { fetchFilmById, fetchSimilarById } from '../../store/api-actions';
 
 const FilmPage: FC = () => {
-  const [currentMovie, setCurrentMovie] = useState<Movie>();
-  const [similarFilms, setSimilarFilms] = useState<Movie[]>([]);
+  const id = Number(useParams().id);
 
-  const { id } = useParams();
+  const movies = useAppSelector(getFilms);
+  const currentMovie = useAppSelector(getFilm);
+  const similarFilms = useAppSelector(getSimilarFilm);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const dispatch = useAppDispatch();
 
-  const { authorizationStatus } = useAppSelector((state) => state);
 
   useEffect(() => {
-    getMovie(Number(id)).then(({ data }) => {
-      if (data) {
-        setCurrentMovie(data);
-      } else {
-        return <NotFoundPage />;
-      }
-    });
-    getSimilarMovies(Number(id)).then(({ data }) => setSimilarFilms(data));
-  }, [id]);
+    if (!currentMovie || currentMovie.id !== id) {
+      dispatch(setIsDataLoaded(false));
+      dispatch(fetchFilmById(id));
+      dispatch(fetchSimilarById(id));
+      dispatch(setIsDataLoaded(true));
+    }
+  }, [currentMovie, dispatch, id]);
 
 
   if (!currentMovie) {
@@ -76,7 +78,7 @@ const FilmPage: FC = () => {
                     <use xlinkHref="#add"></use>
                   </svg>
                   <span>My list</span>
-                  <span className="film-card__count">9</span>
+                  <span className="film-card__count">{movies.length}</span>
                 </button>
                 {
                   authorizationStatus === AuthorizationStatus.Auth

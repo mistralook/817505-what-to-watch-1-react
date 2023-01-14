@@ -1,14 +1,21 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { useAppDispatch } from '../../hooks/redux.hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux.hooks';
 import { loginAction } from '../../store/api-actions';
-import { BrowserRoutes } from '../../app-routes.const';
+import { AuthorizationStatus, BrowserRoutes } from '../../app-routes.const';
+import { getAuthorizationStatus } from '../../store/user-reducer/user-selectors';
 
 const SignInPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  if (authorizationStatus === AuthorizationStatus.Auth){
+    navigate(BrowserRoutes.MAIN);
+  }
 
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);

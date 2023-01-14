@@ -12,6 +12,7 @@ export type Movie = {
   starring: string[];
   runTime: number;
   videoLink: string;
+  backgroundImage: string;
 }
 
 export enum MovieRatingDescription {
@@ -21,6 +22,8 @@ export enum MovieRatingDescription {
   VERYGOOD = 'Very good',
   AWESOME = 'Awesome',
 }
+
+export const ALL_GENRES = 'All genres';
 
 export enum Genre {
   ALL_GENRES = 'All genres',

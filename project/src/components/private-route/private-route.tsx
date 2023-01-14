@@ -1,15 +1,14 @@
 import { FC} from 'react';
 import { Navigate } from 'react-router-dom';
 import { BrowserRoutes, AuthorizationStatus } from '../../app-routes.const';
-import { useAppSelector } from '../../hooks/redux.hooks';
 
 type Props = {
+  authorizationStatus: AuthorizationStatus;
   children: JSX.Element;
 }
 
 const PrivateRoute: FC<Props> = (props) => {
-  const { children } = props;
-  const { authorizationStatus } = useAppSelector((state) => state);
+  const { children, authorizationStatus } = props;
 
   return (
     authorizationStatus === AuthorizationStatus.Auth
