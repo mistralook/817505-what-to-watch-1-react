@@ -4,6 +4,7 @@ import App from './components/app/app';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { checkAuthAction, fetchFavoriteFilms, fetchFilmsAction, fetchPromoFilm } from './store/api-actions';
+import { BrowserRouter } from 'react-router-dom';
 
 store.dispatch(checkAuthAction());
 store.dispatch(fetchFilmsAction());
@@ -18,7 +19,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <BrowserRouter>
+        <App/>
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>,
 );

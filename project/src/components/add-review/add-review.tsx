@@ -1,15 +1,13 @@
 import { ChangeEvent, FC, FormEvent, useState } from 'react';
 import { postMovieReview } from '../../transport/api.requests';
+import { getFilm } from '../../store/movie-reducer/movie-selectors';
+import { useAppSelector } from '../../hooks/redux.hooks';
+import { keygen } from '../../utils/key-gen';
 
-type Props = {
-  movieId: number;
-};
-
-const AddReview: FC<Props> = (props) => {
-  const { movieId } = props;
-
+const AddReview: FC = () => {
   const [reviewText, setReviewText] = useState('');
   const [rating, setRating] = useState(0);
+  const currentMovie = useAppSelector(getFilm);
 
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setReviewText(e.target.value);
@@ -19,12 +17,11 @@ const AddReview: FC<Props> = (props) => {
     setRating(Number(e.target.value));
   };
 
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (reviewText && rating) {
-      postMovieReview(movieId, {comment: reviewText, rating: rating}).then(() => window.history.back());
+      postMovieReview(Number(currentMovie?.id), {comment: reviewText, rating: rating}).then(() => window.history.back());
     }
   };
 
@@ -32,14 +29,12 @@ const AddReview: FC<Props> = (props) => {
     <form action="#" className="add-review__form" onSubmit={handleSubmit}>
       <div className="rating">
         <div className="rating__stars">
-          {
-            Array.from(Array(10).keys()).map((el) => (
-              <span key={el}>
-                <input className="rating__input" id={`radio-${el + 1}`} type="radio" name="rating" value={el + 1} checked={rating === el + 1} onChange={onRatingChange}/>
-                <label className="rating__label" htmlFor={`radio-${el + 1}`}>Rating {el + 1}</label>
-              </span>
-            ))
-          }
+          {Array.from(Array(10).keys()).map((el) => (
+            <span key={keygen()}>
+              <input className="rating__input" id={`radio-${10 - el}`} type="radio" name="rating" value={10 - el} checked={rating === 10 - el} onChange={onRatingChange}/>
+              <label className="rating__label" htmlFor={`radio-${10 - el}`}>Rating {10 - el}</label>
+            </span>
+          ))}
         </div>
       </div>
 
