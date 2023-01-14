@@ -1,12 +1,15 @@
 import { FC } from 'react';
 import { Movie } from '../../types/main-page.types';
+import { useParams } from 'react-router-dom';
 
 type Props = {
-  movie: Movie;
+  movies: Movie[];
 }
 
 const PlayerPage: FC<Props> = (props: Props) => {
-  const { videoLink, posterImage } = props.movie;
+  const { movies } = props;
+  const id = Number(useParams().id);
+  const movie = movies.find((currentMovie) => currentMovie.id === id);
 
   return (
     <>
@@ -58,7 +61,7 @@ const PlayerPage: FC<Props> = (props: Props) => {
       </div>
 
       <div className="player">
-        <video src={videoLink} className="player__video" poster={posterImage} />
+        <video src={movie?.videoLink} className="player__video" poster={movie?.posterImage} />
 
         <button type="button" className="player__exit">Exit</button>
 

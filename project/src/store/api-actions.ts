@@ -2,40 +2,32 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { Movie } from '../types/main-page.types';
 import { AppDispatch, State } from '../types/state.types';
-import { changeAuthStatus, loadMovies, setLoading, setUserData } from './action';
-import { dropToken, saveToken } from '../transport/api.token';
-import { AuthorizationStatus } from '../app-routes.const';
 import { User } from '../types/user.type';
 import { ApiMethods } from '../const/apiMethods';
 import { AuthInfo } from '../types/auth.type';
+import { Review } from '../types/review.types';
 
-export const fetchFilmsAction = createAsyncThunk<void, undefined, {
+export const fetchFilmsAction = createAsyncThunk<Movie[], undefined, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'fetchFilms',
-  async (_arg, { dispatch, extra: api }) => {
+  async (_arg, { extra: api}) => {
     const { data } = await api.get<Movie[]>(ApiMethods.FILMS);
-    dispatch(setLoading(true));
-    dispatch(loadMovies(data));
-    dispatch(setLoading(false));
+    return data;
   },
 );
 
-export const checkAuthAction = createAsyncThunk<void, undefined, {
+export const checkAuthAction = createAsyncThunk<User, undefined, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'checkAuth',
-  async (_arg, {dispatch, extra: api}) => {
-    try {
-      await api.get(ApiMethods.LOGIN);
-      dispatch(changeAuthStatus(AuthorizationStatus.Auth));
-    } catch {
-      dispatch(changeAuthStatus(AuthorizationStatus.NoAuth));
-    }
+  async (_arg, { extra: api}) => {
+    const { data: user } = await api.get<User>(ApiMethods.LOGIN);
+    return user;
   },
 );
 
@@ -47,24 +39,73 @@ export const logoutAction = createAsyncThunk<void, undefined, {
   'logout',
   async (_arg, {dispatch, extra: api}) => {
     await api.delete(ApiMethods.LOGOUT);
-    dropToken();
-    dispatch(changeAuthStatus(AuthorizationStatus.NoAuth));
-    dispatch(setUserData(null));
   },
 );
 
-export const loginAction = createAsyncThunk<void, AuthInfo, {
+export const loginAction = createAsyncThunk<User, AuthInfo, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'login',
-  async ({email, password}, {dispatch, extra: api}) => {
+  async ({email: email, password}, { extra: api}) => {
     const { data: user } = await api.post<User>(ApiMethods.LOGIN, {email, password});
-    saveToken(user.token);
-    dispatch(changeAuthStatus(AuthorizationStatus.Auth));
-    dispatch(setUserData(user));
+    return user;
   },
 );
 
+export const fetchPromoFilm = createAsyncThunk<Movie, undefined, {
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'fetchPromoFilm',
+  async (_arg, { extra: api }) => {
+    const { data } = await api.get<Movie>(
+      `${ApiMethods.PROMO}`
+    );
+    return data;
+  }
+);
 
+export const fetchFavoriteFilms = createAsyncThunk<Movie[], undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>('fetchFavoriteFilm', async(_arg, {extra: api}) => {
+  const {data} = await api.get<Movie[]>(
+    ApiMethods.FAVOURITE
+  );
+  return data;
+});
+
+export const fetchSimilarById = createAsyncThunk<Movie[], number, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+
+}>('fetchSimilarById', async (movieId: number, { extra: api }) => {
+  const { data } = await api.get<Movie[]>(
+    `${ApiMethods.FILMS}/${movieId}${ApiMethods.SIMILAR}`
+  );
+  return data;
+});
+
+export const fetchReviewsById = createAsyncThunk<Review[], number, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>('fetchCommentsById', async (movieId: number, { extra: api }) => {
+  const { data } = await api.get<Review[]>(
+    `${ApiMethods.COMMENTS}/${movieId}`
+  );
+  return data;
+});
+
+export const fetchFilmById = createAsyncThunk<Movie, number, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>('fetchFilmById', async (movieId, { extra: api }) => {
+  const { data } = await api.get<Movie>(`${ApiMethods.FILMS}/${movieId}`);
+  return data;
+});

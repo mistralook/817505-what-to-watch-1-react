@@ -1,12 +1,15 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { useAppSelector } from '../../hooks/redux.hooks';
 import { UserBlock } from '../../components/user-block/user-block';
+import { Movie } from '../../types/main-page.types';
 import CatalogMovieList from '../../components/movie-list/catalog-movie-list';
 
+type Props = {
+  movies: Movie[];
+}
 
-const MyListPage: FC = () => {
-  const { movies } = useAppSelector((state) => state);
+const MyListPage: FC<Props> = (props) => {
+  const { movies } = props;
 
   return (
     <>

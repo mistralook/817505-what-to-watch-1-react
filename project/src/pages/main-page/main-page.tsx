@@ -1,27 +1,20 @@
 import { FC, useState } from 'react';
-import { Genre, Movie } from '../../types/main-page.types';
+import { Genre } from '../../types/main-page.types';
 import { useAppSelector } from '../../hooks/redux.hooks';
 import { Link } from 'react-router-dom';
+import { UserBlock } from '../../components/user-block/user-block';
+import { getCurrentGenre, getFilms, getPromoFilm } from '../../store/main-reducer/main-selectors';
 import CatalogMovieList from '../../components/movie-list/catalog-movie-list';
 import GenresList from '../../components/genre-list/genre-list';
 import ShowMore from '../../components/show-more/show-more';
-import Spinner from '../../components/spinner/spinner';
-import { UserBlock } from '../../components/user-block/user-block';
 
-type Props = {
-  movie: Movie;
-};
+const MainPage: FC = () => {
+  const movies = useAppSelector(getFilms);
+  const currentGenre = useAppSelector(getCurrentGenre);
+  const promoFilm = useAppSelector(getPromoFilm);
 
-const MainPage: FC<Props> = (props) => {
-  const { movie: { name, genre, released }} = props;
-
-  const { activeGenre, movies, isLoading } = useAppSelector((state) => state);
   const [numberOfShownMovies, setNumberOfShownMovies] = useState<number>(8);
-  const filteredMovies = movies.filter((movie) => movie.genre === activeGenre || activeGenre === Genre.ALL_GENRES);
-
-  if (isLoading) {
-    return <Spinner />;
-  }
+  const filteredMovies = movies.filter((movie) => movie.genre === currentGenre || currentGenre === Genre.ALL_GENRES);
 
   return (
     <>
@@ -59,7 +52,7 @@ const MainPage: FC<Props> = (props) => {
 
       <section className="film-card">
         <div className="film-card__bg">
-          <img src="img/bg-the-grand-budapest-hotel.jpg" alt="The Grand Budapest Hotel"/>
+          <img src={promoFilm?.backgroundImage} alt={promoFilm?.name}/>
         </div>
 
         <h1 className="visually-hidden">WTW</h1>
@@ -79,14 +72,14 @@ const MainPage: FC<Props> = (props) => {
         <div className="film-card__wrap">
           <div className="film-card__info">
             <div className="film-card__poster">
-              <img src="img/the-grand-budapest-hotel-poster.jpg" alt="The Grand Budapest Hotel poster" width="218" height="327"/>
+              <img src={promoFilm?.posterImage} alt={promoFilm?.name} width="218" height="327"/>
             </div>
 
             <div className="film-card__desc">
-              <h2 className="film-card__title">{name}</h2>
+              <h2 className="film-card__title">{promoFilm?.name}</h2>
               <p className="film-card__meta">
-                <span className="film-card__genre">{genre}</span>
-                <span className="film-card__year">{released}</span>
+                <span className="film-card__genre">{promoFilm?.genre}</span>
+                <span className="film-card__year">{promoFilm?.released}</span>
               </p>
 
               <div className="film-card__buttons">
@@ -113,7 +106,11 @@ const MainPage: FC<Props> = (props) => {
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
 
-          <GenresList genres={Object.values(Genre)} setNumberOfShownMovies={setNumberOfShownMovies}/>
+          <GenresList
+            genres={Object.values(Genre)}
+            setNumberOfShownMovies={setNumberOfShownMovies}
+            currentGenre={currentGenre}
+          />
 
           <CatalogMovieList movies={filteredMovies.slice(0, numberOfShownMovies)} />
 
