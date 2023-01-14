@@ -8,7 +8,7 @@ import { fetchFavoriteFilms } from '../../store/api-actions';
 import { AuthorizationStatus } from '../../app-routes.const';
 import CatalogMovieList from '../../components/movie-list/catalog-movie-list';
 
-const MyListPage: FC = () => {
+const MyList: FC = () => {
   const favoriteMovies = useAppSelector(getFavoriteFilms);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dispatch = useAppDispatch();
@@ -109,4 +109,4 @@ const MyListPage: FC = () => {
   );
 };
 
-export default MyListPage;
+export default MyList;

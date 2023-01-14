@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { ALL_GENRES_CONST, Genre } from '../../types/main-page.types';
+import { ALL_GENRES_CONST } from '../../types/main-page.types';
 import { useAppSelector } from '../../hooks/redux.hooks';
 import { Link } from 'react-router-dom';
 import { UserBlock } from '../../components/user-block/user-block';
@@ -103,7 +103,7 @@ const MainPage: FC = () => {
           <h2 className="catalog__title visually-hidden">Catalog</h2>
 
           <GenresList
-            genres={Object.values(Genre)}
+            genres={[ALL_GENRES_CONST].concat([...new Set(movies.map((movie) => movie.genre))]).slice(0, 10)}
             setNumberOfShownMovies={setNumberOfShownMovies}
             currentGenre={currentGenre}
           />

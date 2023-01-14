@@ -1,9 +1,8 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
-import { Genre } from '../../types/main-page.types';
 import GenreItem from './genre-item';
 
 type Props = {
-  genres: Genre[];
+  genres: string[];
   setNumberOfShownMovies: Dispatch<SetStateAction<number>>;
   currentGenre: string;
 };

@@ -41,7 +41,13 @@ const AddReview: FC = () => {
       <div className="add-review__text">
         <textarea className="add-review__textarea" name="review-text" id="review-text" placeholder="Review text" value={reviewText} onChange={handleTextChange}/>
         <div className="add-review__submit">
-          <button className="add-review__btn" type="submit">Post</button>
+          <button
+            className="add-review__btn"
+            type="submit"
+            disabled={reviewText.length < 50 || reviewText.length >= 400 || rating === 0}
+          >
+            Post
+          </button>
         </div>
       </div>
     </form>

@@ -1,11 +1,10 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { useAppDispatch } from '../../hooks/redux.hooks';
 import { changeGenre } from '../../store/action';
-import { Genre } from '../../types/main-page.types';
 import { AMOUNT_OF_VISIBLE_MOVIES_STEP } from '../../const/const';
 
 type Props = {
-  genre: Genre;
+  genre: string;
   setNumberOfShownMovies: Dispatch<SetStateAction<number>>;
   isActive: boolean;
 };

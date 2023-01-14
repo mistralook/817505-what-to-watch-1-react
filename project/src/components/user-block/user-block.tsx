@@ -33,7 +33,7 @@ export const UserBlock: FC = () => {
           </li>
         </>
       ) : (
-        <Link to={BrowserRoutes.SIGNIN} className="user-block__link">Sign in</Link>
+        <Link to={BrowserRoutes.LOGIN} className="user-block__link">Sign in</Link>
       )}
     </ul>
   );

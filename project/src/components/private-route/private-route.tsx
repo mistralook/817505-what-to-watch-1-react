@@ -15,7 +15,7 @@ const PrivateRoute: FC<Props> = (props) => {
   return (
     authorizationStatus === AuthorizationStatus.Auth
       ? children
-      : <Navigate to={BrowserRoutes.SIGNIN} />
+      : <Navigate to={BrowserRoutes.LOGIN} />
   );
 };
 

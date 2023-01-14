@@ -31,7 +31,7 @@ describe('actions async tests', () => {
   it('auth status equals auth when 200', async () => {
     const store = mockStore();
     mockAPI
-      .onGet(BrowserRoutes.SIGNIN)
+      .onGet(BrowserRoutes.LOGIN)
       .reply(200, []);
 
     expect(store.getActions()).toEqual([]);
@@ -48,7 +48,7 @@ describe('actions async tests', () => {
   it('should login when POST /login', async () => {
     const fakeUser: AuthInfo = {email: 'aboba@gmail.com', password: '123qwe'};
 
-    mockAPI.onPost(BrowserRoutes.SIGNIN).reply(200, {token: 'secret'});
+    mockAPI.onPost(BrowserRoutes.LOGIN).reply(200, {token: 'secret'});
     const store = mockStore();
     await store.dispatch(loginAction(fakeUser));
     const actions = store.getActions().map(({type}) => type);
