@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux.hooks';
 import { getFilms, getIsDataLoaded } from '../../store/main-reducer/main-selectors';
-import { getAuthorizationStatus } from '../../store/user-reducer/user-selectors';
 import { BrowserRoutes } from '../../app-routes.const';
 import MainPage from '../../pages/main-page/main-page';
 import SignInPage from '../../pages/sign-in-page/sign-in-page';
@@ -18,7 +17,6 @@ import Spinner from '../spinner/spinner';
 const App: FC = () => {
   const isDataLoaded = useAppSelector(getIsDataLoaded);
   const movies = useAppSelector(getFilms);
-  const authorizationStatus = useAppSelector(getAuthorizationStatus);
   if (!isDataLoaded){
     return <Spinner/>;
   }
@@ -30,7 +28,7 @@ const App: FC = () => {
       <Route
         path={BrowserRoutes.MYLIST}
         element={
-          <PrivateRoute authorizationStatus={authorizationStatus}>
+          <PrivateRoute>
             <MyListPage />
           </PrivateRoute>
         }
