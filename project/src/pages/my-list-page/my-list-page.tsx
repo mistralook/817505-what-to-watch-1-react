@@ -1,15 +1,23 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { UserBlock } from '../../components/user-block/user-block';
-import { Movie } from '../../types/main-page.types';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux.hooks';
+import { getFavoriteFilms } from '../../store/main-reducer/main-selectors';
+import { getAuthorizationStatus } from '../../store/user-reducer/user-selectors';
+import { fetchFavoriteFilms } from '../../store/api-actions';
+import { AuthorizationStatus } from '../../app-routes.const';
 import CatalogMovieList from '../../components/movie-list/catalog-movie-list';
 
-type Props = {
-  movies: Movie[];
-}
+const MyListPage: FC = () => {
+  const favoriteMovies = useAppSelector(getFavoriteFilms);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const dispatch = useAppDispatch();
 
-const MyListPage: FC<Props> = (props) => {
-  const { movies } = props;
+  useEffect(() => {
+    if (authorizationStatus === AuthorizationStatus.Auth) {
+      dispatch(fetchFavoriteFilms());
+    }
+  }, [authorizationStatus, dispatch]);
 
   return (
     <>
@@ -71,13 +79,16 @@ const MyListPage: FC<Props> = (props) => {
             </Link>
           </div>
 
-          <h1 className="page-title user-page__title">My list <span className="user-page__film-count">9</span></h1>
+          <h1 className="page-title user-page__title">
+            My list
+            <span className="user-page__film-count">{favoriteMovies.length}</span>
+          </h1>
           <UserBlock />
         </header>
 
         <section className="catalog">
           <h2 className="catalog__title visually-hidden">Catalog</h2>
-          <CatalogMovieList movies={movies} />
+          <CatalogMovieList movies={favoriteMovies} />
         </section>
 
         <footer className="page-footer">

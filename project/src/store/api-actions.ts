@@ -48,7 +48,7 @@ export const loginAction = createAsyncThunk<User, AuthInfo, {
   extra: AxiosInstance;
 }>(
   'login',
-  async ({email: email, password}, { extra: api}) => {
+  async ({email, password}, { extra: api}) => {
     const { data: user } = await api.post<User>(ApiMethods.LOGIN, {email, password});
     return user;
   },
@@ -72,11 +72,23 @@ export const fetchFavoriteFilms = createAsyncThunk<Movie[], undefined, {
   state: State;
   extra: AxiosInstance;
 }>('fetchFavoriteFilm', async(_arg, {extra: api}) => {
-  const {data} = await api.get<Movie[]>(
-    ApiMethods.FAVOURITE
-  );
+  const {data} = await api.get<Movie[]>(ApiMethods.FAVOURITE);
   return data;
 });
+
+export const setFavoriteFilmAction = createAsyncThunk<Movie, { movieId: number; status: number }, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}
+  >(
+    'setFavoriteFilm',
+    async ({ movieId, status }, { extra: api }) => {
+      const { data } = await api.post<Movie>(`${ApiMethods.FAVOURITE}/${movieId}/${status}`);
+      return data;
+    }
+  );
+
 
 export const fetchSimilarById = createAsyncThunk<Movie[], number, {
   dispatch: AppDispatch;

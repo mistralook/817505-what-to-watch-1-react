@@ -13,6 +13,7 @@ export type Movie = {
   runTime: number;
   videoLink: string;
   backgroundImage: string;
+  isFavorite: boolean;
 }
 
 export enum MovieRatingDescription {
@@ -23,10 +24,9 @@ export enum MovieRatingDescription {
   AWESOME = 'Awesome',
 }
 
-export const ALL_GENRES = 'All genres';
+export const ALL_GENRES_CONST = 'All genres';
 
 export enum Genre {
-  ALL_GENRES = 'All genres',
   COMEDY = 'Comedy',
   CRIME = 'Crime',
   DOCUMENTARY = 'Documentary',

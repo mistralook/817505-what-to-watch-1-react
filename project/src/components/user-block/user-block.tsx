@@ -23,7 +23,9 @@ export const UserBlock: FC = () => {
         <>
           <li className="user-block__item">
             <div className="user-block__avatar">
-              <img src={user?.avatarUrl} alt="User avatar" width="63" height="63"/>
+              <Link to={BrowserRoutes.MYLIST}>
+                <img src={user?.avatarUrl} alt="User avatar" width="63" height="63" />
+              </Link>
             </div>
           </li>
           <li className="user-block__item">

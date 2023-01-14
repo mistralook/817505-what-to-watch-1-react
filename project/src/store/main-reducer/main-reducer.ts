@@ -1,16 +1,17 @@
 import { MainState } from '../../types/state.types';
-import { ALL_GENRES } from '../../types/main-page.types';
+import { ALL_GENRES_CONST } from '../../types/main-page.types';
 import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const/apiMethods';
-import { fetchFilmsAction, fetchPromoFilm } from '../api-actions';
+import { fetchFavoriteFilms, fetchFilmsAction, fetchPromoFilm } from '../api-actions';
 import { changeGenre } from '../action';
 
 const initialState: MainState = {
   movies: [],
-  currentGenre: ALL_GENRES,
+  currentGenre: ALL_GENRES_CONST,
   promoFilm: null,
   error: null,
-  isDataLoaded: false
+  isDataLoaded: false,
+  favoriteFilms: []
 };
 
 export const mainReducer = createSlice({
@@ -31,6 +32,9 @@ export const mainReducer = createSlice({
       .addCase(fetchFilmsAction.fulfilled, (state, action) => {
         state.movies = action.payload;
         state.isDataLoaded = true;
+      })
+      .addCase(fetchFavoriteFilms.fulfilled, (state, action) => {
+        state.favoriteFilms = action.payload;
       });
   }
 });
