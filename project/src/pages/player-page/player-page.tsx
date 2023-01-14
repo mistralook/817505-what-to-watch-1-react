@@ -1,15 +1,63 @@
-import { FC } from 'react';
-import { Movie } from '../../types/main-page.types';
-import { useParams } from 'react-router-dom';
+import { FC, useEffect, useRef, useState } from 'react';
+import { Link, Navigate, useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux.hooks';
+import { getFilm } from '../../store/movie-reducer/movie-selectors';
+import { fetchFilmById } from '../../store/api-actions';
+import { BrowserRoutes } from '../../app-routes.const';
+import dayjs from 'dayjs';
+import PauseButton from '../../components/play-buttons/pause-button';
+import PlayButton from '../../components/play-buttons/play-button';
 
-type Props = {
-  movies: Movie[];
-}
-
-const PlayerPage: FC<Props> = (props: Props) => {
-  const { movies } = props;
+const PlayerPage: FC = () => {
   const id = Number(useParams().id);
-  const movie = movies.find((currentMovie) => currentMovie.id === id);
+  const dispatch = useAppDispatch();
+
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [progress, setProgressBar] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  const movie = useAppSelector(getFilm);
+
+  useEffect(() => {
+    dispatch(fetchFilmById(id));
+  }, [id, dispatch]);
+
+  const handleIsPlayClick = () => {
+    if (videoRef.current?.paused) {
+      videoRef.current.play();
+      setIsVideoPlaying(true);
+    } else {
+      videoRef.current?.pause();
+      setIsVideoPlaying(false);
+    }
+  };
+
+  const handleFullScreen = () => {
+    if (videoRef.current?.requestFullscreen) {
+      videoRef.current?.requestFullscreen();
+    }
+  };
+
+  const handleProgressBar = () => {
+    const durationTime = videoRef?.current?.duration;
+    const currentTime = videoRef?.current?.currentTime;
+
+    if (durationTime && currentTime) {
+      setProgressBar((currentTime / durationTime) * 100);
+      setTimeLeft(durationTime - currentTime);
+    }
+  };
+
+  const getTimeLeftInFormat = (seconds: number) => {
+    if (seconds / 60 / 60 >= 1) {
+      return dayjs(seconds * 1000).format('-hh:mm:ss');}
+    return dayjs(seconds * 1000).format('-mm:ss');
+  };
+
+  if (!movie) {
+    return <Navigate to={BrowserRoutes.MAIN} />;
+  }
 
   return (
     <>
@@ -61,29 +109,33 @@ const PlayerPage: FC<Props> = (props: Props) => {
       </div>
 
       <div className="player">
-        <video src={movie?.videoLink} className="player__video" poster={movie?.posterImage} />
+        <video
+          ref={videoRef}
+          onTimeUpdate={handleProgressBar}
+          src={movie.videoLink}
+          className="player__video"
+          poster={movie.backgroundImage}
+        />
 
-        <button type="button" className="player__exit">Exit</button>
+        <Link to={`/films/${movie.id}`} type='button' className='player__exit'>Exit</Link>
 
         <div className="player__controls">
           <div className="player__controls-row">
             <div className="player__time">
-              <progress className="player__progress" value="30" max="100"/>
-              <div className="player__toggler" style={{left: '30%'}}>Toggler</div>
+              <progress className="player__progress" value={progress} max="100"/>
+              <div className="player__toggler" style={{left: `${progress}%`}}>Toggler</div>
+
             </div>
-            <div className="player__time-value">1:30:29</div>
+            <div className="player__time-value">{getTimeLeftInFormat(timeLeft)}</div>
           </div>
 
           <div className="player__controls-row">
-            <button type="button" className="player__play">
-              <svg viewBox="0 0 19 19" width="19" height="19">
-                <use xlinkHref="#play-s"/>
-              </svg>
-              <span>Play</span>
+            <button type="button" className="player__play" onClick={handleIsPlayClick}>
+              { isVideoPlaying ? <PauseButton/> : <PlayButton/> }
             </button>
-            <div className="player__name">Transpotting</div>
+            <div className="player__name">{movie.name}</div>
 
-            <button type="button" className="player__full-screen">
+            <button type="button" className="player__full-screen" onClick={handleFullScreen}>
               <svg viewBox="0 0 27 27" width="27" height="27">
                 <use xlinkHref="#full-screen"/>
               </svg>

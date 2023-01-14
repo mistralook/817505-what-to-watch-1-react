@@ -1,7 +1,13 @@
 import { MovieState } from '../../types/state.types';
 import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const/apiMethods';
-import { fetchFilmById, fetchReviewsById, fetchSimilarById } from '../api-actions';
+import {
+  fetchFilmById,
+  fetchPromoFilm,
+  fetchReviewsById,
+  fetchSimilarById,
+  setFavoriteFilmAction
+} from '../api-actions';
 
 const initialState: MovieState = {
   movie: null,
@@ -18,11 +24,17 @@ export const movieReducer = createSlice({
       .addCase(fetchFilmById.fulfilled, (state, action) => {
         state.movie = action.payload;
       })
+      .addCase(fetchPromoFilm.fulfilled, (state, action) => {
+        state.movie = action.payload;
+      })
       .addCase(fetchSimilarById.fulfilled, (state, action) => {
         state.similarMovies = action.payload;
       })
       .addCase(fetchReviewsById.fulfilled, (state, action) => {
         state.reviews = action.payload;
+      })
+      .addCase(setFavoriteFilmAction.fulfilled, (state, action) => {
+        state.movie = action.payload;
       });
   }
 });

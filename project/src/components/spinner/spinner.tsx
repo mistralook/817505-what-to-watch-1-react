@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 const Spinner: FC = () => (
-  <div className="lds-dual-ring"></div>
+  <div>Loading...</div>
 );
 
 export default Spinner;

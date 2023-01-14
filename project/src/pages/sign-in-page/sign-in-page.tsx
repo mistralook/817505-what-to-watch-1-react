@@ -8,6 +8,11 @@ import { getAuthorizationStatus } from '../../store/user-reducer/user-selectors'
 const SignInPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [isError, setIsError] = useState<boolean>(false);
+
+  const isValidPassword = (pass: string): boolean =>
+    /\d+[a-zA-Z]+|[a-zA-Z]+\d+/.test(pass);
+
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   const dispatch = useAppDispatch();
@@ -28,8 +33,12 @@ const SignInPage = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (email && password) {
-      dispatch(loginAction({ email, password })).then(() => navigate(BrowserRoutes.MAIN));
+    if (email && password && isValidPassword(password)) {
+      dispatch(loginAction({ email, password }))
+        .then(() => navigate(BrowserRoutes.MAIN))
+        .catch(() => setIsError(true));
+    } else {
+      setIsError(true);
     }
   };
 
@@ -79,6 +88,11 @@ const SignInPage = () => {
 
         <div className="sign-in user-page__content">
           <form action="#" className="sign-in__form" onSubmit={handleSubmit}>
+            <div className="sign-in__message">
+              {isError && (
+                <p>Please enter a valid email address and password</p>
+              )}
+            </div>
             <div className="sign-in__fields">
               <div className="sign-in__field">
                 <input className="sign-in__input" type="email" placeholder="Email address" name="user-email" id="user-email" value={email} onChange={handleEmailChange}/>

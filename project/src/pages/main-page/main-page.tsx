@@ -1,20 +1,25 @@
 import { FC, useState } from 'react';
-import { Genre } from '../../types/main-page.types';
+import { ALL_GENRES_CONST, Genre } from '../../types/main-page.types';
 import { useAppSelector } from '../../hooks/redux.hooks';
 import { Link } from 'react-router-dom';
 import { UserBlock } from '../../components/user-block/user-block';
 import { getCurrentGenre, getFilms, getPromoFilm } from '../../store/main-reducer/main-selectors';
+import { AuthorizationStatus } from '../../app-routes.const';
+import { AddToListButton } from '../../components/add-to-list-button/add-to-list-button';
+import { getAuthorizationStatus } from '../../store/user-reducer/user-selectors';
 import CatalogMovieList from '../../components/movie-list/catalog-movie-list';
 import GenresList from '../../components/genre-list/genre-list';
 import ShowMore from '../../components/show-more/show-more';
+import PlayButton from '../../components/play-buttons/play-button';
 
 const MainPage: FC = () => {
   const movies = useAppSelector(getFilms);
   const currentGenre = useAppSelector(getCurrentGenre);
   const promoFilm = useAppSelector(getPromoFilm);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
   const [numberOfShownMovies, setNumberOfShownMovies] = useState<number>(8);
-  const filteredMovies = movies.filter((movie) => movie.genre === currentGenre || currentGenre === Genre.ALL_GENRES);
+  const filteredMovies = movies.filter((movie) => movie.genre === currentGenre || currentGenre === ALL_GENRES_CONST);
 
   return (
     <>
@@ -83,19 +88,10 @@ const MainPage: FC = () => {
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
-                  <svg viewBox="0 0 19 19" width="19" height="19">
-                    <use xlinkHref="#play-s" />
-                  </svg>
-                  <span>Play</span>
-                </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add" />
-                  </svg>
-                  <span>My list</span>
-                  <span className="film-card__count">9</span>
-                </button>
+                <Link to={`/player/${promoFilm?.id ?? ''}`} className="btn btn--play film-card__button">
+                  <PlayButton />
+                </Link>
+                { authorizationStatus === AuthorizationStatus.Auth ? <AddToListButton movie={promoFilm}/> : null }
               </div>
             </div>
           </div>

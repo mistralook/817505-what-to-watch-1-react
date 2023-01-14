@@ -8,19 +8,18 @@ import MovieTabs from '../../components/tabs/movie-tabs';
 import Spinner from '../../components/spinner/spinner';
 import { getAuthorizationStatus } from '../../store/user-reducer/user-selectors';
 import { getFilm, getSimilarFilm } from '../../store/movie-reducer/movie-selectors';
-import { getFilms } from '../../store/main-reducer/main-selectors';
 import { setIsDataLoaded } from '../../store/action';
 import { fetchFilmById, fetchSimilarById } from '../../store/api-actions';
+import { AddToListButton } from '../../components/add-to-list-button/add-to-list-button';
+import PlayButton from '../../components/play-buttons/play-button';
 
 const FilmPage: FC = () => {
   const id = Number(useParams().id);
 
-  const movies = useAppSelector(getFilms);
   const currentMovie = useAppSelector(getFilm);
   const similarFilms = useAppSelector(getSimilarFilm);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   const dispatch = useAppDispatch();
-
 
   useEffect(() => {
     if (!currentMovie || currentMovie.id !== id) {
@@ -30,7 +29,6 @@ const FilmPage: FC = () => {
       dispatch(setIsDataLoaded(true));
     }
   }, [currentMovie, dispatch, id]);
-
 
   if (!currentMovie) {
     return <Spinner />;
@@ -67,19 +65,10 @@ const FilmPage: FC = () => {
               </p>
 
               <div className="film-card__buttons">
-                <button className="btn btn--play film-card__button" type="button">
-                  <svg viewBox="0 0 19 19" width="19" height="19">
-                    <use xlinkHref="#play-s"></use>
-                  </svg>
-                  <span>Play</span>
-                </button>
-                <button className="btn btn--list film-card__button" type="button">
-                  <svg viewBox="0 0 19 20" width="19" height="20">
-                    <use xlinkHref="#add"></use>
-                  </svg>
-                  <span>My list</span>
-                  <span className="film-card__count">{movies.length}</span>
-                </button>
+                <Link to={`/player/${currentMovie?.id ?? ''}`} className="btn btn--play film-card__button">
+                  <PlayButton />
+                </Link>
+                { authorizationStatus === AuthorizationStatus.Auth ? <AddToListButton movie={currentMovie}/> : null }
                 {
                   authorizationStatus === AuthorizationStatus.Auth
                     ? <Link to={`/films/${currentMovie.id}/review`} className="btn film-card__button">Add review</Link>

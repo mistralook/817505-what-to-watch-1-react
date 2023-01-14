@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useAppSelector } from '../../hooks/redux.hooks';
-import { getFilms, getIsDataLoaded } from '../../store/main-reducer/main-selectors';
+import { getIsDataLoaded } from '../../store/main-reducer/main-selectors';
 import { getAuthorizationStatus } from '../../store/user-reducer/user-selectors';
 import { BrowserRoutes } from '../../app-routes.const';
 import MainPage from '../../pages/main-page/main-page';
@@ -17,7 +17,7 @@ import Spinner from '../spinner/spinner';
 
 const App: FC = () => {
   const isDataLoaded = useAppSelector(getIsDataLoaded);
-  const movies = useAppSelector(getFilms);
+  // const movies = useAppSelector(getFilms);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
   if (!isDataLoaded){
     return <Spinner/>;
@@ -32,13 +32,13 @@ const App: FC = () => {
           path={BrowserRoutes.MYLIST}
           element={
             <PrivateRoute authorizationStatus={authorizationStatus}>
-              <MyListPage movies={movies} />
+              <MyListPage />
             </PrivateRoute>
           }
         />
         <Route path={BrowserRoutes.FILM} element={<MoviePage />}/>
         <Route path={BrowserRoutes.ADDREVIEW} element={<AddReviewPage />}/>
-        <Route path={BrowserRoutes.PLAYER} element={<PlayerPage movies={movies} />}/>
+        <Route path={BrowserRoutes.PLAYER} element={<PlayerPage />}/>
         <Route path={BrowserRoutes.NOTFOUND} element={<NotFoundPage />}/>
       </Routes>
     </BrowserRouter>

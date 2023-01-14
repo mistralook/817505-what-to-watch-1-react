@@ -1,4 +1,4 @@
-import { State } from "../../types/state.types";
+import { State } from '../../types/state.types';
 import { AuthorizationStatus } from '../../app-routes.const';
 import { NameSpace } from '../../const/apiMethods';
 import { User } from '../../types/user.type';
