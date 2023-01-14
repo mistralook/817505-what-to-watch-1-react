@@ -7,7 +7,7 @@ describe('show more', () => {
     const initialEntries = ['/'];
     render(
       <MemoryRouter initialEntries={initialEntries}>
-        <ShowMore isVisible={true} setNumberOfShownMovies={() => void 0} />
+        <ShowMore isVisible setNumberOfShownMovies={() => void 0} />
       </MemoryRouter>
     );
 

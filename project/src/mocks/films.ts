@@ -100,21 +100,21 @@ export const MOCK_MOVIE_LIST: Movie[] = [
 export const MOCK_REVIEW_LIST: Review[] = [
   {
     id: 1,
-    comment: `mock 1`,
+    comment: 'mock 1',
     rating: '2',
     user: {name: 'Ivan', id: 1},
     date: 'November 18, 2015',
   },
   {
     id: 2,
-    comment: `mock 2`,
+    comment: 'mock 2',
     rating: '2',
     user: {name: 'Ivan', id: 2},
     date: 'November 19, 2015',
   },
   {
     id: 3,
-    comment: `mock 3`,
+    comment: 'mock 3',
     rating: '2',
     user: {name: 'Ivan', id: 3},
     date: 'November 20, 2015',
