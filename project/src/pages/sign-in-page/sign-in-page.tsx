@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux.hooks';
 import { loginAction } from '../../store/api-actions';
@@ -19,7 +19,7 @@ const SignInPage = () => {
   const navigate = useNavigate();
 
   if (authorizationStatus === AuthorizationStatus.Auth){
-    navigate(BrowserRoutes.MAIN);
+    return <Navigate to={BrowserRoutes.MAIN}/>;
   }
 
   const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {

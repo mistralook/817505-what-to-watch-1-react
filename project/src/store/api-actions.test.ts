@@ -61,7 +61,7 @@ describe('actions async tests', () => {
 
   it('should logout when DELETE /logout', async () => {
     mockAPI
-      .onDelete(ApiMethods.LOGOUT)
+      .onDelete(ApiMethods.Logout)
       .reply(204);
 
     const store = mockStore();
@@ -75,7 +75,7 @@ describe('actions async tests', () => {
   });
 
   it('should load films when GET /films', async () => {
-    mockAPI.onGet(ApiMethods.FILMS).reply(200, MOCK_MOVIE_LIST);
+    mockAPI.onGet(ApiMethods.Films).reply(200, MOCK_MOVIE_LIST);
     const store = mockStore();
     await store.dispatch(fetchFilmsAction());
 
@@ -89,7 +89,7 @@ describe('actions async tests', () => {
 
   it('should load comments when GET /promo', async () => {
     mockAPI
-      .onGet(ApiMethods.PROMO)
+      .onGet(ApiMethods.Promo)
       .reply(200);
 
     const store = mockStore();
@@ -105,7 +105,7 @@ describe('actions async tests', () => {
   });
 
   it('should load comments when GET /comments/{filmId}', async () => {
-    const url = `${ApiMethods.COMMENTS}/${MOCK_MOVIE.id}`;
+    const url = `${ApiMethods.Comments}/${MOCK_MOVIE.id}`;
     mockAPI
       .onGet(url)
       .reply(200, MOCK_REVIEW_LIST);

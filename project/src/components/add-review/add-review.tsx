@@ -31,7 +31,15 @@ const AddReview: FC = () => {
         <div className="rating__stars">
           {Array.from(Array(10).keys()).map((el) => (
             <span key={keygen()}>
-              <input className="rating__input" id={`radio-${10 - el}`} type="radio" name="rating" value={10 - el} checked={rating === 10 - el} onChange={onRatingChange}/>
+              <input
+                className="rating__input"
+                id={`radio-${10 - el}`}
+                type="radio"
+                name="rating"
+                value={10 - el}
+                checked={rating === 10 - el}
+                onChange={onRatingChange}
+              />
               <label className="rating__label" htmlFor={`radio-${10 - el}`}>Rating {10 - el}</label>
             </span>
           ))}

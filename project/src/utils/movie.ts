@@ -1,16 +1,14 @@
 import { MovieRatingDescription } from '../types/main-page.types';
 
 export const getRatingDescription = (rating: number): MovieRatingDescription | string => {
-  if (rating <= 2) {
-    return MovieRatingDescription.BAD;
-  } else if (rating <= 4) {
-    return MovieRatingDescription.NORMAL;
-  } else if (rating <= 6) {
-    return MovieRatingDescription.GOOD;
-  } else if (rating <= 8) {
-    return MovieRatingDescription.VERYGOOD;
-  } else if (rating <= 10) {
-    return MovieRatingDescription.AWESOME;
+  if (rating < 3) {
+    return MovieRatingDescription.Bad;
+  } else if (rating < 5) {
+    return MovieRatingDescription.Normal;
+  } else if (rating < 8) {
+    return MovieRatingDescription.Good;
+  } else if (rating < 10) {
+    return MovieRatingDescription.Verygood;
   }
-  return 'wrong rating';
+  return MovieRatingDescription.Awesome;
 };

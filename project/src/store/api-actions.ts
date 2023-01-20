@@ -14,7 +14,7 @@ export const fetchFilmsAction = createAsyncThunk<Movie[], undefined, {
 }>(
   'fetchFilms',
   async (_arg, { extra: api}) => {
-    const { data } = await api.get<Movie[]>(ApiMethods.FILMS);
+    const { data } = await api.get<Movie[]>(ApiMethods.Films);
     return data;
   },
 );
@@ -26,7 +26,7 @@ export const checkAuthAction = createAsyncThunk<User, undefined, {
 }>(
   'checkAuth',
   async (_arg, { extra: api}) => {
-    const { data: user } = await api.get<User>(ApiMethods.LOGIN);
+    const { data: user } = await api.get<User>(ApiMethods.Login);
     return user;
   },
 );
@@ -38,7 +38,7 @@ export const logoutAction = createAsyncThunk<void, undefined, {
 }>(
   'logout',
   async (_arg, {dispatch, extra: api}) => {
-    await api.delete(ApiMethods.LOGOUT);
+    await api.delete(ApiMethods.Logout);
   },
 );
 
@@ -49,7 +49,7 @@ export const loginAction = createAsyncThunk<User, AuthInfo, {
 }>(
   'login',
   async ({email, password}, { extra: api}) => {
-    const { data: user } = await api.post<User>(ApiMethods.LOGIN, {email, password});
+    const { data: user } = await api.post<User>(ApiMethods.Login, {email, password});
     return user;
   },
 );
@@ -61,7 +61,7 @@ export const fetchPromoFilm = createAsyncThunk<Movie, undefined, {
   'fetchPromoFilm',
   async (_arg, { extra: api }) => {
     const { data } = await api.get<Movie>(
-      `${ApiMethods.PROMO}`
+      `${ApiMethods.Promo}`
     );
     return data;
   }
@@ -72,7 +72,7 @@ export const fetchFavoriteFilms = createAsyncThunk<Movie[], undefined, {
   state: State;
   extra: AxiosInstance;
 }>('fetchFavoriteFilm', async(_arg, {extra: api}) => {
-  const {data} = await api.get<Movie[]>(ApiMethods.FAVOURITE);
+  const {data} = await api.get<Movie[]>(ApiMethods.Favorite);
   return data;
 });
 
@@ -84,7 +84,7 @@ export const setFavoriteFilmAction = createAsyncThunk<Movie, { movieId: number; 
   >(
     'setFavoriteFilm',
     async ({ movieId, status }, { extra: api }) => {
-      const { data } = await api.post<Movie>(`${ApiMethods.FAVOURITE}/${movieId}/${status}`);
+      const { data } = await api.post<Movie>(`${ApiMethods.Favorite}/${movieId}/${status}`);
       return data;
     }
   );
@@ -97,7 +97,7 @@ export const fetchSimilarById = createAsyncThunk<Movie[], number, {
 
 }>('fetchSimilarById', async (movieId: number, { extra: api }) => {
   const { data } = await api.get<Movie[]>(
-    `${ApiMethods.FILMS}/${movieId}${ApiMethods.SIMILAR}`
+    `${ApiMethods.Films}/${movieId}${ApiMethods.Similar}`
   );
   return data;
 });
@@ -108,7 +108,7 @@ export const fetchReviewsById = createAsyncThunk<Review[], number, {
   extra: AxiosInstance;
 }>('fetchCommentsById', async (movieId: number, { extra: api }) => {
   const { data } = await api.get<Review[]>(
-    `${ApiMethods.COMMENTS}/${movieId}`
+    `${ApiMethods.Comments}/${movieId}`
   );
   return data;
 });
@@ -118,6 +118,6 @@ export const fetchFilmById = createAsyncThunk<Movie, number, {
   state: State;
   extra: AxiosInstance;
 }>('fetchFilmById', async (movieId, { extra: api }) => {
-  const { data } = await api.get<Movie>(`${ApiMethods.FILMS}/${movieId}`);
+  const { data } = await api.get<Movie>(`${ApiMethods.Films}/${movieId}`);
   return data;
 });

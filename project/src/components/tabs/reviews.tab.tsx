@@ -20,7 +20,7 @@ const ReviewsTab: FC<Props> = (props) => {
     reviews.map(({comment, user, date, rating}) => {
       const dateString =
           Intl.DateTimeFormat('en-US', {month: 'long', year: 'numeric', day: 'numeric'}).format(Date.parse(date));
-
+      const fixedRating = rating.toFixed(1);
       return (
         <div className="review" key={`${comment}-${user.name}-${rating}`}>
           <blockquote className="review__quote">
@@ -32,7 +32,7 @@ const ReviewsTab: FC<Props> = (props) => {
             </footer>
           </blockquote>
 
-          <div className="review__rating">{rating}</div>
+          <div className="review__rating">{fixedRating}</div>
         </div>
       );
     });

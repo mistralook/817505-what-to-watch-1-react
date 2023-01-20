@@ -99,7 +99,7 @@ describe('main reducer', () => {
   });
 
   it('change genre action', () => {
-    const genre = Genre.COMEDY;
+    const genre = Genre.Comedy;
     const state: MainState = {
       currentGenre: ALL_GENRES_CONST,
       error: null,
